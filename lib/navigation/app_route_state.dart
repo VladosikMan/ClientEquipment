@@ -11,6 +11,13 @@ class AppRouteState{
     });
 
 
+    // Начальное состояние (авторизация)
+    factory AppRouteState.initial() => AppRouteState._(
+      name: 'auth',
+      params: {},
+      isLoggedIn: false,
+    );
+
     // Методы для создания состояний:
     factory AppRouteState.auth() => AppRouteState._(
       name: 'auth',
