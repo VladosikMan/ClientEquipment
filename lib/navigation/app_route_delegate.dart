@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 
 import '../auth.dart';
 import '../screens/auth_screen.dart';
+import '../screens/details_screen.dart';
+import '../screens/home_screen.dart';
+import '../screens/journal_screen.dart';
+import '../screens/qr_screen.dart';
 
 class AppRouterDelegate extends RouterDelegate<AppRouteState>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRouteState> {
@@ -94,14 +98,14 @@ class AppRouterDelegate extends RouterDelegate<AppRouteState>
 
     // Дополнительные экраны поверх главного
     switch (_state.name) {
-      // case 'details':
-      //   pages.add(
-      //     MaterialPage(
-      //       key: const ValueKey('DetailsPage'),
-      //       child: DetailsScreen(id: _state.params['id']),
-      //     ),
-      //   );
-      //   break;
+      case 'details':
+        pages.add(
+          MaterialPage(
+            key: const ValueKey('DetailsPage'),
+            child: DetailsScreen(/*id: _state.params['id']*/),
+          ),
+        );
+        break;
       case 'journal':
         pages.add(
           MaterialPage(
@@ -110,14 +114,14 @@ class AppRouterDelegate extends RouterDelegate<AppRouteState>
           ),
         );
         break;
-      // case 'qr':
-      //   pages.add(
-      //     MaterialPage(
-      //       key: const ValueKey('QrPage'),
-      //       child: QrScreen(),
-      //     ),
-      //   );
-      //   break;
+      case 'qr':
+        pages.add(
+          MaterialPage(
+            key: const ValueKey('QrPage'),
+            child: QrScreen(),
+          ),
+        );
+        break;
     }
 
     return pages;
