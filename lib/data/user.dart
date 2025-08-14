@@ -3,7 +3,7 @@ import 'dart:convert';
 class User {
   final String name;
   final int? id;
-  final String role;
+  final int role;
   final double date;
 
   User({
@@ -33,7 +33,7 @@ class User {
     return User(
       name: json['name'] as String,
       id: json['id'] as int,
-      role: json['role'] as String,
+      role: json['role'] as int,
       date: json['date'] as double,
     );
   }
