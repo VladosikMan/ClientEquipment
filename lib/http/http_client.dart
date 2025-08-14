@@ -8,7 +8,6 @@ import 'api/tag_api.dart';
 import 'api/user_api.dart';
 class ApiClient{
    final Dio _dio = Dio();
-   late final Dio _dio;
    late final UserApi user;
    late final StoreApi store;
    late final GroupApi group;
