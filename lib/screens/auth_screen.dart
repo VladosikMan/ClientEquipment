@@ -1,19 +1,190 @@
 // Экран авторизации
+import 'package:eqiup_client/states/auth_notifier.dart';
 import 'package:flutter/material.dart';
 
-class AuthScreen extends StatelessWidget {
-  const AuthScreen({super.key, required this.onLogin});
-  final VoidCallback onLogin;
+import '../data/user.dart';
+
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key, required this.authNotifier});
+  final AuthNotifier authNotifier;
+  //создать объект состояния проекта. При изменении состояния перерисоыввется интерфейс
+  @override
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+
+  // Контроллерф для ввода полей
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  //переменные состояния
+  bool _isLoginMode = true; //режим входа/регистрации - совместить с прошлым
+  bool _obscurePassword = true;
+
+  String? _selectedRole; //Выбранная роль
+
+  // Доступные роли пользователей
+
+  final List<String> _userRoles = ['Пользователь', 'Администратор'];
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Логин')),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: onLogin,
-          child: const Text('Войти'),
+      body: SafeArea(child: _getSingleChildScrollView(context).first),
+    );
+  }
+
+  Set<SingleChildScrollView> _getSingleChildScrollView(BuildContext context) =>
+      {
+        SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          child: _getConstrainedBox(context).first,
+        ),
+      };
+
+  Set<ConstrainedBox> _getConstrainedBox(BuildContext context) => {
+    ConstrainedBox(
+      constraints: BoxConstraints(
+        minHeight:
+            MediaQuery.of(context).size.height -
+            MediaQuery.of(context).padding.top,
+      ),
+      child: _getColumn().first,
+    ),
+  };
+
+  Set<Column> _getColumn() => {
+    Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        //здесь распологаются виждеты
+        _buildRoundIcon(),
+        const SizedBox(height: 32),
+        // Поле имени пользователя
+        TextFormField(
+          controller: _usernameController,
+          decoration: const InputDecoration(
+            labelText: 'Имя пользователя',
+            prefixIcon: Icon(Icons.person),
+          ),
+          keyboardType: TextInputType.name,
+          textInputAction: TextInputAction.next,
+        ),
+        const SizedBox(height: 20),
+
+        // Поле пароля
+        TextFormField(
+          controller: _passwordController,
+          decoration: InputDecoration(
+            labelText: 'Пароль',
+            prefixIcon: const Icon(Icons.lock),
+            suffixIcon: IconButton(
+              icon: Icon(
+                _obscurePassword ? Icons.visibility_off : Icons.visibility,
+              ),
+              onPressed: () {
+                setState(() => _obscurePassword = !_obscurePassword);
+              },
+            ),
+          ),
+          obscureText: _obscurePassword,
+          textInputAction: TextInputAction.done,
+        ),
+        const SizedBox(height: 20),
+        //выбор роли (только в режиме регистрации)
+        if (!_isLoginMode) ...[
+          DropdownButtonFormField<String>(
+            value: _selectedRole,
+            decoration: const InputDecoration(
+              labelText: 'Роль пользователя',
+              prefixIcon: Icon(Icons.people_alt),
+            ),
+            items: _userRoles
+                .map((role) => DropdownMenuItem(value: role, child: Text(role)))
+                .toList(),
+
+            onChanged: (value) => setState(() => _selectedRole = value),
+            validator: (value) => value == null ? 'Выберите роль' : null,
+          ),
+        ],
+        
+        //кнопка входа/регистрации
+        ElevatedButton(onPressed: _handleAuth, child:  Text(_isLoginMode ? 'Войти' : 'Зарегистрироваться')),
+        const SizedBox(height: 16),
+        // Переключение между режимами
+        TextButton(
+          onPressed: () => setState(() => _isLoginMode = !_isLoginMode),
+          child: Text(
+            _isLoginMode
+                ? 'Создать новый аккаунт'
+                : 'Уже есть аккаунт? Войти',
+          ),
+        ),
+      ],
+    ),
+  };
+
+  // Построение круглой иконки
+  Widget _buildRoundIcon() {
+    return Center(
+      child: Container(
+        width: 200,
+        height: 200,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.black87,
+          border: Border.all(width: 2, color: Colors.black),
+        ),
+        child: const Image(
+          image: AssetImage('assets/images/logo_mini.png'),
+          color: null,
         ),
       ),
     );
   }
+
+
+  // Обработка авторизации/регистрации
+  void _handleAuth() async{
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text;
+
+    // Валидация
+    if (username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Заполните все поля')),
+      );
+      return;
+    }
+
+    if (!_isLoginMode && _selectedRole == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Выберите роль пользователя')),
+      );
+      return;
+    }
+
+    //тут все пройдено
+    //widget.onLogin();
+
+    final user = User(name: username, id: 1, role: 1, date: 232342);
+    final success = await widget.authNotifier.login(user);
+
+    // В реальном приложении здесь будет вызов API
+    print('Username: $username');
+    print('Password: $password');
+    if (!_isLoginMode) print('Role: $_selectedRole');
+  }
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
 }

@@ -1,8 +1,6 @@
 import 'package:eqiup_client/navigation/app_route_state.dart';
 import 'package:eqiup_client/states/auth_notifier.dart';
 import 'package:flutter/material.dart';
-
-import '../auth.dart';
 import '../screens/auth_screen.dart';
 import '../screens/details_screen.dart';
 import '../screens/home_screen.dart';
@@ -12,6 +10,7 @@ import '../screens/qr_screen.dart';
 class AppRouterDelegate extends RouterDelegate<AppRouteState>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRouteState> {
   //ключ к состоянию виджета
+
   @override
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey();
 
@@ -20,20 +19,44 @@ class AppRouterDelegate extends RouterDelegate<AppRouteState>
   late final AuthNotifier authNotifier;
 
   AppRouteState _state = AppRouteState.initial();
-
+  bool _isLoading = true;
   AppRouterDelegate({required this.authNotifier}) {
     //реагируем на измнение авторизации
     _instance = this; // Сохраняем экземпляр
-    authNotifier.addListener(() {
-      if (authNotifier.isLoggedIn) {
-        _state = _state.copyWith(isLoggedIn: true, name: 'home');
-      } else {
-        _state = _state.copyWith(isLoggedIn: false, name: 'auth');
-      }
+    // if (authNotifier.isLoggedIn) {
+    //   _state =AppRouteState.home(); // Автоматический переход
+    // }
 
-      notifyListeners();
-    });
+    // Проверяем при запуске, есть ли сохраненный пользователь
+    _checkAuthStatus();
+    authNotifier.addListener(_onAuthStateChanged);
   }
+
+  // Проверка статуса авторизации
+  Future<void> _checkAuthStatus() async {
+    final hasUser = await authNotifier.hasRegisteredUser();
+
+    if (hasUser) {
+      // Если пользователь уже зарегистрирован, загружаем его данные
+      await authNotifier.loadUserData();
+      _state = AppRouteState.home();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+
+  // Реакция на изменение статуса авторизации
+  void _onAuthStateChanged() {
+    if (authNotifier.isLoggedIn) {
+      _state = _state.copyWith(isLoggedIn: true, name: 'home');
+    } else {
+      _state = _state.copyWith(isLoggedIn: false, name: 'auth');
+    }
+    notifyListeners();
+  }
+
   static AppRouterDelegate? of(){
     return _instance;
   }
@@ -68,6 +91,14 @@ class AppRouterDelegate extends RouterDelegate<AppRouteState>
   // этот метод будет использоваться при изменения состояния - построение страниц
   @override
   Widget build(BuildContext context) {
+
+    if (_isLoading) {
+      return const Material(
+        child: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+
     // TODO: implement build
     return Navigator(
       key: navigatorKey,
@@ -83,19 +114,19 @@ class AppRouterDelegate extends RouterDelegate<AppRouteState>
   List<Page> _buildPages() {
     final pages = <Page>[];
     // Всегда добавляем AuthScreen если не авторизованы
-    if (!_state.isLoggedIn) {
+    if (!authNotifier.isLoggedIn) {
       pages.add(
         MaterialPage(
           key: const ValueKey('AuthPage'),
-          child: AuthScreen(onLogin: authNotifier.login),
+          child: AuthScreen(authNotifier: authNotifier),
         ),
       );
     }
-    // Главный экран
-    pages.add(
-      MaterialPage(key: const ValueKey('HomePage'), child: HomeScreen()),
-    );
-
+    if(authNotifier.isLoggedIn) {
+      pages.add(
+        MaterialPage(key: const ValueKey('HomePage'), child: HomeScreen()),
+      );
+    }
     // Дополнительные экраны поверх главного
     switch (_state.name) {
       case 'details':
