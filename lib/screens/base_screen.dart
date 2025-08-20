@@ -11,7 +11,7 @@ class BaseScreen extends StatelessWidget {
     super.key,
     required this.title,
     required this.body,
-    this.showBackButton = false,
+    this.showBackButton = false
   });
 
   @override
@@ -22,7 +22,7 @@ class BaseScreen extends StatelessWidget {
         screenTitle: title,
         showBackButton: showBackButton,
       ),
-      body: body,
+      body: body
     );
   }
 }

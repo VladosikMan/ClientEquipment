@@ -65,7 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         //здесь распологаются виждеты
-        buildRoundIcon(),
+        buildRoundIcon(200, 200),
         const SizedBox(height: 32),
         // Поле имени пользователя
         TextFormField(

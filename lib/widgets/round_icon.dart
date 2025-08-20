@@ -1,11 +1,13 @@
 // Построение круглой иконки
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 
-Widget buildRoundIcon() {
+Widget buildRoundIcon(double width, double height) {
   return Center(
     child: Container(
-      width: 200,
-      height: 200,
+      width: width,
+      height: height,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.black87,
