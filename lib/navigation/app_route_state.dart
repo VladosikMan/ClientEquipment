@@ -48,6 +48,12 @@ class AppRouteState{
       params: {},
       isLoggedIn: true,
     );
+
+    factory AppRouteState.about() => AppRouteState._(
+      name: 'about',
+      params: {},
+      isLoggedIn: true,
+    );
     // Обновление состояния (для иммутабельности)
     AppRouteState copyWith({
       String? name,

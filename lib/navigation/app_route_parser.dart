@@ -22,6 +22,8 @@ class AppRouteParser extends RouteInformationParser<AppRouteState> {
         return AppRouteState.journal();
       case '/qr':
         return AppRouteState.qr();
+      case '/about':
+        return AppRouteState.about();
       default:
         return AppRouteState.initial();
     }
@@ -41,6 +43,8 @@ class AppRouteParser extends RouteInformationParser<AppRouteState> {
         return const RouteInformation(location: '/journal');
       case 'qr':
         return const RouteInformation(location: '/qr');
+      case 'about':
+        return const RouteInformation(location: '/about');
       default:
         return const RouteInformation(location: '/');
     }

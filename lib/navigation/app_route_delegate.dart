@@ -1,4 +1,5 @@
 import 'package:eqiup_client/navigation/app_route_state.dart';
+import 'package:eqiup_client/screens/about_screen.dart';
 import 'package:eqiup_client/states/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import '../screens/auth_screen.dart';
@@ -150,6 +151,14 @@ class AppRouterDelegate extends RouterDelegate<AppRouteState>
           MaterialPage(
             key: const ValueKey('QrPage'),
             child: QrScreen(),
+          ),
+        );
+        break;
+      case 'about':
+        pages.add(
+          MaterialPage(
+            key: const ValueKey('AboutPage'),
+            child: AboutScreen(),
           ),
         );
         break;
