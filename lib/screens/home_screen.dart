@@ -1,4 +1,5 @@
 // Экран авторизации
+import 'package:eqiup_client/screens/base_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../navigation/app_route_delegate.dart';
@@ -11,27 +12,50 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final delegate = AppRouterDelegate.of();
-    return Scaffold(
-      appBar: AppBar(title: const Text('Главная')),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
-              onPressed: () => delegate?.push(AppRouteState.details(id: 1)),
-              child: const Text('Детали'),
+    return BaseScreen(title: "Главный экран",
+        body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => delegate?.push(AppRouteState.details(id: 1)),
+                    child: const Text('Детали'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => delegate?.push(AppRouteState.journal()),
+                    child: const Text('Журнал'),
+                  ),
+                  ElevatedButton(
+                    onPressed: () => delegate?.push(AppRouteState.qr()),
+                    child: const Text('QR-код'),
+                  ),
+                ],
+              ),
             ),
-            ElevatedButton(
-              onPressed: () => delegate?.push(AppRouteState.journal()),
-              child: const Text('Журнал'),
-            ),
-            ElevatedButton(
-              onPressed: () => delegate?.push(AppRouteState.qr()),
-              child: const Text('QR-код'),
-            ),
-          ],
-        ),
-      ),
     );
+    // return Scaffold(
+    //   appBar: AppBar(title: const Text('Главная')),
+    //   body: Center(
+    //     child: Column(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children: [
+    //         ElevatedButton(
+    //           onPressed: () => delegate?.push(AppRouteState.details(id: 1)),
+    //           child: const Text('Детали'),
+    //         ),
+    //         ElevatedButton(
+    //           onPressed: () => delegate?.push(AppRouteState.journal()),
+    //           child: const Text('Журнал'),
+    //         ),
+    //         ElevatedButton(
+    //           onPressed: () => delegate?.push(AppRouteState.qr()),
+    //           child: const Text('QR-код'),
+    //         ),
+    //       ],
+    //     ),
+    //   ),
+    // );
+
+
   }
 }

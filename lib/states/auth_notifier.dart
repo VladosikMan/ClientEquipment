@@ -16,7 +16,9 @@ class AuthNotifier extends ChangeNotifier {
 
   // Загрузк данных пользователя при инициализации
   Future<void> loadUserData() async {
+
     final prefs = await SharedPreferences.getInstance();
+   // await prefs.clear(); // Очищает все данные
     final userData = prefs.getString(USER_DATA);
 
     if (userData != null) {

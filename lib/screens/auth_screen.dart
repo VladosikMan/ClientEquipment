@@ -1,8 +1,10 @@
 // Экран авторизации
+import 'package:eqiup_client/screens/base_screen.dart';
 import 'package:eqiup_client/states/auth_notifier.dart';
 import 'package:flutter/material.dart';
 
 import '../data/user.dart';
+import '../widgets/round_icon.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key, required this.authNotifier});
@@ -28,14 +30,14 @@ class _AuthScreenState extends State<AuthScreen> {
 
   final List<String> _userRoles = ['Пользователь', 'Администратор'];
 
-
-
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(child: _getSingleChildScrollView(context).first),
+    return  BaseScreen(title: "Регистрация",
+        body: SafeArea(child: _getSingleChildScrollView(context).first)
     );
+    // return Scaffold(
+    //   body: SafeArea(child: _getSingleChildScrollView(context).first),
+    // );
   }
 
   Set<SingleChildScrollView> _getSingleChildScrollView(BuildContext context) =>
@@ -63,7 +65,7 @@ class _AuthScreenState extends State<AuthScreen> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         //здесь распологаются виждеты
-        _buildRoundIcon(),
+        buildRoundIcon(),
         const SizedBox(height: 32),
         // Поле имени пользователя
         TextFormField(
@@ -112,7 +114,7 @@ class _AuthScreenState extends State<AuthScreen> {
             validator: (value) => value == null ? 'Выберите роль' : null,
           ),
         ],
-        
+        const SizedBox(height: 30),
         //кнопка входа/регистрации
         ElevatedButton(onPressed: _handleAuth, child:  Text(_isLoginMode ? 'Войти' : 'Зарегистрироваться')),
         const SizedBox(height: 16),
@@ -128,26 +130,6 @@ class _AuthScreenState extends State<AuthScreen> {
       ],
     ),
   };
-
-  // Построение круглой иконки
-  Widget _buildRoundIcon() {
-    return Center(
-      child: Container(
-        width: 200,
-        height: 200,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.black87,
-          border: Border.all(width: 2, color: Colors.black),
-        ),
-        child: const Image(
-          image: AssetImage('assets/images/logo_mini.png'),
-          color: null,
-        ),
-      ),
-    );
-  }
-
 
   // Обработка авторизации/регистрации
   void _handleAuth() async{
@@ -170,7 +152,6 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     //тут все пройдено
-    //widget.onLogin();
 
     final user = User(name: username, id: 1, role: 1, date: 232342);
     final success = await widget.authNotifier.login(user);
