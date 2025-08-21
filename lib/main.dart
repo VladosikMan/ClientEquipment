@@ -1,3 +1,4 @@
+import 'package:eqiup_client/http/http_client.dart';
 import 'package:eqiup_client/states/auth_notifier.dart';
 import 'package:eqiup_client/themes/theme.dart';
 import 'package:eqiup_client/values/strings/app_strings.dart';
@@ -10,6 +11,8 @@ import 'navigation/app_route_delegate.dart';
 import 'navigation/app_route_parser.dart';
 
 void main() {
+  ApiClient();
+
   runApp(MyApp());
 }
 

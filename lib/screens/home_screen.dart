@@ -1,4 +1,5 @@
 // Экран авторизации
+import 'package:eqiup_client/http/http_client.dart';
 import 'package:eqiup_client/screens/base_screen.dart';
 import 'package:eqiup_client/screens/floating_screen.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,10 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(height: 40),
                 buildRoundIcon(150, 150),
                 SizedBox(height: 40),
-                AnimatedButton(text: 'Детали', buttonColor: Colors.deepPurpleAccent, onPressed: () => delegate?.push(AppRouteState.details(id: 1))),
+                AnimatedButton(text: 'Детали', buttonColor: Colors.deepPurpleAccent, onPressed: () => {
+                  ApiClient().test()
+                  /*delegate?.push(AppRouteState.details(id: 1))*/
+                }),
                 SizedBox(height: 20),
                 AnimatedButton(text: 'Журнал', buttonColor: Colors.deepPurpleAccent, onPressed: () => delegate?.push(AppRouteState.journal())),
                 SizedBox(height: 20),

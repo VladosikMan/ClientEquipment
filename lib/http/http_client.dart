@@ -16,8 +16,25 @@ class ApiClient{
    late final JournalApi journal;
    late final TagApi tag;
 
+   // синглктон объект
 
-   ApiClient(){
+
+   static final ApiClient _instance = ApiClient._internal();
+   factory ApiClient() {
+      print("Получаем");
+      return _instance;
+   }
+   ApiClient._internal() {
+      _settingsApiClient();
+   }
+
+
+
+   void test(){
+      print("Тест");
+   }
+   void _settingsApiClient(){
+      print("Инитим");
       //настраиваем базовые характеристики
       _dio.options.baseUrl = '$BASE_URL';
       _dio.options.connectTimeout = Duration(seconds: 30);
