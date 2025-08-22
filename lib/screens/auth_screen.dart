@@ -2,6 +2,7 @@
 import 'package:eqiup_client/models/auth_model.dart';
 import 'package:eqiup_client/screens/base_screen.dart';
 import 'package:flutter/material.dart';
+import '../data/user.dart';
 import '../models/http/ping_model.dart';
 import '../widgets/round_icon.dart';
 
@@ -134,34 +135,34 @@ class _AuthScreenState extends State<AuthScreen> {
 
   // Обработка авторизации/регистрации
   void _handleAuth() async{
-    pingNotifier.fetchData();
-    // final username = _usernameController.text.trim();
-    // final password = _passwordController.text;
-    //
-    // // Валидация
-    // if (username.isEmpty || password.isEmpty) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Заполните все поля')),
-    //   );
-    //   return;
-    // }
-    //
-    // if (!_isLoginMode && _selectedRole == null) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Выберите роль пользователя')),
-    //   );
-    //   return;
-    // }
-    //
-    // //тут все пройдено
-    //
-    // final user = User(name: username, id: 1, role: 1, date: 232342);
-    // final success = await widget.authNotifier.login(user);
-    //
-    // // В реальном приложении здесь будет вызов API
-    // print('Username: $username');
-    // print('Password: $password');
-    // if (!_isLoginMode) print('Role: $_selectedRole');
+  //  pingNotifier.fetchData();
+    final username = _usernameController.text.trim();
+    final password = _passwordController.text;
+
+    // Валидация
+    if (username.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Заполните все поля')),
+      );
+      return;
+    }
+
+    if (!_isLoginMode && _selectedRole == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Выберите роль пользователя')),
+      );
+      return;
+    }
+
+    //тут все пройдено
+
+    final user = User(name: username, id: 1, role: 1, date: 232342);
+    final success = await widget.authNotifier.login(user);
+
+    // В реальном приложении здесь будет вызов API
+    print('Username: $username');
+    print('Password: $password');
+    if (!_isLoginMode) print('Role: $_selectedRole');
   }
   @override
   void dispose() {

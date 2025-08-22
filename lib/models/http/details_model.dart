@@ -1,28 +1,22 @@
-/*
-
-
 import 'package:flutter/cupertino.dart';
 
 import '../../http/http_client.dart';
 
 class DetailsModel with ChangeNotifier{
   //количество деталей
-  int quantity = 0;
-  Future<void> getQuantityDetails()async{
+  int length = 0;
+  Future<void> getLengthDetails()async{
     try {
-      final response = await ApiClient().getSimpleRequest("/ping");
+      final response = await ApiClient().detail.getLengthDetails();
       if(response.statusCode == 200){
-        status = true;
+        length =int.parse(response.data);
       }else{
-        status = false;
       }
-      message = response.statusMessage;
     } catch (e) {
-      status = false;
-      message = e.toString();
+    //e.toString();
+
     } finally {
       notifyListeners(); // Снова уведомляем об изменениях
     }
   }
 }
-*/

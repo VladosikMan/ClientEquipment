@@ -10,12 +10,12 @@ import 'api/user_api.dart';
 
 class ApiClient {
   final Dio _dio = Dio();
-  late final UserApi _user;
-  late final StoreApi _store;
-  late final GroupApi _group;
-  late final DetailApi _detail;
-  late final JournalApi _journal;
-  late final TagApi _tag;
+  late final UserApi user;
+  late final StoreApi store;
+  late final GroupApi group;
+  late final DetailApi detail;
+  late final JournalApi journal;
+  late final TagApi tag;
 
   // синглктон объект
   static final ApiClient _instance = ApiClient._internal();
@@ -39,12 +39,12 @@ class ApiClient {
       LogInterceptor(requestBody: true, responseBody: true, error: true),
     );
 
-    _user = UserApi(_dio);
-    _store = StoreApi(_dio);
-    _group = GroupApi(_dio);
-    _detail = DetailApi(_dio);
-    _journal = JournalApi(_dio);
-    _tag = TagApi(_dio);
+    user = UserApi(_dio);
+    store = StoreApi(_dio);
+    group = GroupApi(_dio);
+    detail = DetailApi(_dio);
+    journal = JournalApi(_dio);
+    tag = TagApi(_dio);
   }
 
   Future<Response> getSimpleRequest(String req) async{

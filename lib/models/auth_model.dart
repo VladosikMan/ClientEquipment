@@ -18,7 +18,7 @@ class AuthModel extends ChangeNotifier {
   Future<void> loadUserData() async {
 
     final prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // Очищает все данные
+    //await prefs.clear(); // Очищает все данные
     final userData = prefs.getString(USER_DATA);
 
     if (userData != null) {

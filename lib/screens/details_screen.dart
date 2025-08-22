@@ -1,30 +1,44 @@
 import 'dart:developer';
 import 'package:eqiup_client/data/user.dart';
+import 'package:eqiup_client/models/http/details_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../http/http_client.dart';
 
 class DetailsScreen extends StatelessWidget {
   const DetailsScreen({super.key});
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Детали')),
-      body: Center(
-        child:ElevatedButton(
-          onPressed:  () async {
-            final apiClient = ApiClient().getSimpleRequest("/ping"); // Создаем клиент
-            try {
-              // User user = User(name: "Аная", id: null, role: 1, date: 121313);
-              // final response = await apiClient.user.createUser(user.toJson());
-              // log('Пользователь создан: ${response.data}');
-            } catch (e) {
-              log('Ошибка: $e');
-            }
-          },
-          child: const Text('Войти'),
+    return ChangeNotifierProvider(
+      create: (context) => DetailsModel(),
+      child: Scaffold(
+        appBar: AppBar(title: const Text('Детали')),
+        body: Center(
+          child: Column(
+            children: [
+              Consumer<DetailsModel>(
+                builder: (context, model, child) {
+                  return Text('Total price: ${model.length}');
+                },
+              ),
+
+              Consumer<DetailsModel>(
+                builder: (context, model, child) {
+                  return   ElevatedButton(
+                    onPressed: ()  {
+                      model.getLengthDetails();
+                      }
+                    ,
+                    child: const Text('Войти'),
+                  );
+                },
+              )
+
+
+            ],
+          ),
         ),
       ),
     );
