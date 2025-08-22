@@ -1,14 +1,14 @@
 // Экран авторизации
+import 'package:eqiup_client/models/auth_model.dart';
 import 'package:eqiup_client/screens/base_screen.dart';
-import 'package:eqiup_client/states/auth_notifier.dart';
 import 'package:flutter/material.dart';
-
-import '../data/user.dart';
+import '../models/http/ping_model.dart';
 import '../widgets/round_icon.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key, required this.authNotifier});
-  final AuthNotifier authNotifier;
+  final AuthModel authNotifier;
+
   //создать объект состояния проекта. При изменении состояния перерисоыввется интерфейс
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -19,7 +19,7 @@ class _AuthScreenState extends State<AuthScreen> {
   // Контроллерф для ввода полей
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  PingModel pingNotifier = PingModel();
   //переменные состояния
   bool _isLoginMode = true; //режим входа/регистрации - совместить с прошлым
   bool _obscurePassword = true;
@@ -32,12 +32,13 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    pingNotifier.addListener(listener);
     return  BaseScreen(title: "Регистрация",
         body: SafeArea(child: _getSingleChildScrollView(context).first)
     );
-    // return Scaffold(
-    //   body: SafeArea(child: _getSingleChildScrollView(context).first),
-    // );
+  }
+  void listener(){
+    print('ПИ пи пи');
   }
 
   Set<SingleChildScrollView> _getSingleChildScrollView(BuildContext context) =>
@@ -133,33 +134,34 @@ class _AuthScreenState extends State<AuthScreen> {
 
   // Обработка авторизации/регистрации
   void _handleAuth() async{
-    final username = _usernameController.text.trim();
-    final password = _passwordController.text;
-
-    // Валидация
-    if (username.isEmpty || password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Заполните все поля')),
-      );
-      return;
-    }
-
-    if (!_isLoginMode && _selectedRole == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Выберите роль пользователя')),
-      );
-      return;
-    }
-
-    //тут все пройдено
-
-    final user = User(name: username, id: 1, role: 1, date: 232342);
-    final success = await widget.authNotifier.login(user);
-
-    // В реальном приложении здесь будет вызов API
-    print('Username: $username');
-    print('Password: $password');
-    if (!_isLoginMode) print('Role: $_selectedRole');
+    pingNotifier.fetchData();
+    // final username = _usernameController.text.trim();
+    // final password = _passwordController.text;
+    //
+    // // Валидация
+    // if (username.isEmpty || password.isEmpty) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Заполните все поля')),
+    //   );
+    //   return;
+    // }
+    //
+    // if (!_isLoginMode && _selectedRole == null) {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Выберите роль пользователя')),
+    //   );
+    //   return;
+    // }
+    //
+    // //тут все пройдено
+    //
+    // final user = User(name: username, id: 1, role: 1, date: 232342);
+    // final success = await widget.authNotifier.login(user);
+    //
+    // // В реальном приложении здесь будет вызов API
+    // print('Username: $username');
+    // print('Password: $password');
+    // if (!_isLoginMode) print('Role: $_selectedRole');
   }
   @override
   void dispose() {

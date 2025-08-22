@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../data/user.dart';
 import '../values/strings/app_strings.dart';
 
-class AuthNotifier extends ChangeNotifier {
+class AuthModel extends ChangeNotifier {
   User? _currentUser;
   bool _isLoggedIn = false;
 
@@ -18,7 +18,7 @@ class AuthNotifier extends ChangeNotifier {
   Future<void> loadUserData() async {
 
     final prefs = await SharedPreferences.getInstance();
-   // await prefs.clear(); // Очищает все данные
+    await prefs.clear(); // Очищает все данные
     final userData = prefs.getString(USER_DATA);
 
     if (userData != null) {

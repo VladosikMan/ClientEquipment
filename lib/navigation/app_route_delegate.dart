@@ -1,6 +1,6 @@
+import 'package:eqiup_client/models/auth_model.dart';
 import 'package:eqiup_client/navigation/app_route_state.dart';
 import 'package:eqiup_client/screens/about_screen.dart';
-import 'package:eqiup_client/states/auth_notifier.dart';
 import 'package:flutter/material.dart';
 import '../screens/auth_screen.dart';
 import '../screens/details_screen.dart';
@@ -17,7 +17,7 @@ class AppRouterDelegate extends RouterDelegate<AppRouteState>
 
   static AppRouterDelegate? _instance;
 
-  late final AuthNotifier authNotifier;
+  late final AuthModel authNotifier;
 
   AppRouteState _state = AppRouteState.initial();
   bool _isLoading = true;

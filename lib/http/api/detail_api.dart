@@ -21,4 +21,7 @@ class DetailApi {
 
   Future<Response> getAllDetails() async =>
       _dio.get('$API_URL/');
+
+  Future<Response> getLengthDetails()async =>
+      _dio.get('$API_URL/length');
 }

@@ -15,22 +15,17 @@ class DetailsScreen extends StatelessWidget {
       body: Center(
         child:ElevatedButton(
           onPressed:  () async {
-            final apiClient = ApiClient(); // Создаем клиент
-
-
+            final apiClient = ApiClient().getSimpleRequest("/ping"); // Создаем клиент
             try {
-              User user = User(name: "Аная", id: null, role: 1, date: 121313);
-              final response = await apiClient.user.createUser(user.toJson());
-              log('Пользователь создан: ${response.data}');
+              // User user = User(name: "Аная", id: null, role: 1, date: 121313);
+              // final response = await apiClient.user.createUser(user.toJson());
+              // log('Пользователь создан: ${response.data}');
             } catch (e) {
               log('Ошибка: $e');
             }
-
-
           },
           child: const Text('Войти'),
         ),
-
       ),
     );
   }

@@ -31,8 +31,7 @@ class HomeScreen extends StatelessWidget {
                 buildRoundIcon(150, 150),
                 SizedBox(height: 40),
                 AnimatedButton(text: 'Детали', buttonColor: Colors.deepPurpleAccent, onPressed: () => {
-                  ApiClient().test()
-                  /*delegate?.push(AppRouteState.details(id: 1))*/
+                  delegate?.push(AppRouteState.details(id: 1))
                 }),
                 SizedBox(height: 20),
                 AnimatedButton(text: 'Журнал', buttonColor: Colors.deepPurpleAccent, onPressed: () => delegate?.push(AppRouteState.journal())),

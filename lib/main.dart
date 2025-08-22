@@ -1,5 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:eqiup_client/http/http_client.dart';
-import 'package:eqiup_client/states/auth_notifier.dart';
+import 'package:eqiup_client/models/auth_model.dart';
 import 'package:eqiup_client/themes/theme.dart';
 import 'package:eqiup_client/values/strings/app_strings.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
 
-  final authNotifier = AuthNotifier();
+  final authNotifier = AuthModel();
   late final routerDelegate = AppRouterDelegate(authNotifier: authNotifier);
   late final routeParser = AppRouteParser();
 
