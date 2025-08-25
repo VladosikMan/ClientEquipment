@@ -19,4 +19,20 @@ class DetailsModel with ChangeNotifier{
       notifyListeners(); // Снова уведомляем об изменениях
     }
   }
+
+  Future<void> createDetail(Map<String, dynamic> detailData)async{
+    try {
+      final response = await ApiClient().detail.createDetail(detailData);
+      if(response.statusCode == 200){
+        //TODO обработка создания детали
+        
+      }else{
+      }
+    } catch (e) {
+      //e.toString();
+
+    } finally {
+      notifyListeners(); // Снова уведомляем об изменениях
+    }
+  }
 }

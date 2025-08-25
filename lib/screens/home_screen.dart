@@ -18,7 +18,6 @@ class HomeScreen extends StatelessWidget {
     final delegate = AppRouterDelegate.of();
     return FloatingButtonScreen(
       title: "Главный экран",
-
       body:
       Padding(
         padding: const EdgeInsets.all(20.0), // Отступы от всех краев экрана)

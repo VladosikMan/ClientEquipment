@@ -18,7 +18,6 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-
         screenTitle: title,
         showBackButton: showBackButton,
       ),

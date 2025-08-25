@@ -22,15 +22,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return LayoutBuilder(
       builder: (context, constraints) {
         final bool isWide = constraints.maxWidth > 600;
-
         return AppBar(
-          automaticallyImplyLeading: false,
           leading: showBackButton
               ? IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: navigation.onBackPressed,
           )
               : null,
+
           title: isWide
               ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
