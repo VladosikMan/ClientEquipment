@@ -1,11 +1,11 @@
 import 'package:eqiup_client/models/http/details_model.dart';
 import 'package:eqiup_client/screens/base_screen.dart';
+import 'package:eqiup_client/screens/fragments/detail_fragment.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DetailsScreen extends StatelessWidget {
    DetailsScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
@@ -13,8 +13,6 @@ class DetailsScreen extends StatelessWidget {
       child: BaseScreen(title: "База", body:  _detailTabController),
     );
   }
-
-
   final DefaultTabController _detailTabController = DefaultTabController(
     length: 3,
     child: Scaffold(
@@ -33,7 +31,7 @@ class DetailsScreen extends StatelessWidget {
       ),
       body: const TabBarView(
         children: [
-          Center(child: Text('Содержимое главной вкладки')),
+          Center(child: DetailsFragment()),
           Center(child: Text('Содержимое настроек')),
           Center(child: Text('Содержимое профиля')),
         ],
