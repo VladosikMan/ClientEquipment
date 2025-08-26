@@ -5,7 +5,6 @@ import '../widgets/rounded_card.dart';
 
 class JournalScreen extends StatelessWidget {
   const JournalScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,7 +85,6 @@ class JournalScreen extends StatelessWidget {
                 ),
               ],
             ),
-
             // Иконка корзины в правом верхнем углу
             Positioned(
               top: 0,

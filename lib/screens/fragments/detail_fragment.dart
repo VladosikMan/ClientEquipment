@@ -1,4 +1,6 @@
+import 'package:eqiup_client/models/http/details_model.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DetailsFragment extends StatelessWidget {
   const DetailsFragment({super.key});
@@ -33,7 +35,7 @@ class DetailsFragment extends StatelessWidget {
 class FilterSection extends StatelessWidget {
   //final ValueChanged<String> onFilterChanged;
 
-  const FilterSection({super.key}/* required this.onFilterChanged}*/);
+  const FilterSection({super.key /* required this.onFilterChanged}*/});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,6 @@ class FilterSection extends StatelessWidget {
           labelText: 'Фильтр',
           border: OutlineInputBorder(),
         ),
-
       ),
     );
   }
@@ -57,8 +58,8 @@ class ControlledListView extends StatelessWidget {
 
   const ControlledListView({
     super.key,
-   // required this.items,
- //   required this.onItemTap,
+    // required this.items,
+    //   required this.onItemTap,
   });
 
   @override
@@ -71,7 +72,11 @@ class ControlledListView extends StatelessWidget {
     //   },
     // );
 
-    return Text(" Список");
+    return   Consumer<DetailsModel>(
+                builder: (context, model, child) {
+                  return Text('Total price: ${model.length}');
+                },
+              );
   }
 }
 
@@ -93,8 +98,21 @@ class ControlButtons extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          ElevatedButton(onPressed: () => {}, child: const Text('Добавить')),
-          ElevatedButton(onPressed: () => {}, child: const Text('Очистить')),
+          Consumer<DetailsModel>(
+            builder: (context, model, child) {
+              return ElevatedButton(
+                onPressed: () => {   model.getAllDetails()},
+                child: const Text('Добавить'),
+              );
+            },
+          ),
+
+          ElevatedButton(
+            onPressed: () {
+
+            },
+            child: const Text('Очистить'),
+          ),
         ],
       ),
     );
