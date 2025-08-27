@@ -1,50 +1,69 @@
-import 'dart:convert';
-
 class Tag {
   final int id;
   final String name;
 
-  Tag({
-    required this.id,
-    required this.name,
-  });
+  Tag({required this.id, required this.name});
 
-  // Конвертация в JSON-объект
+  // Преобразование объекта в Map
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-    };
+    return {'id': id, 'name': name};
   }
 
-  // Конвертация в JSON-строку
-  String toJsonString() {
-    return jsonEncode(toJson());
-  }
+  // Создание объекта из Map с безопасным парсингом
+  factory Tag.fromJson(Map<String, dynamic> json) {
+    // Функции безопасного парсинга
+    int safeParseInt(dynamic value, {int defaultValue = 0}) {
+      if (value == null) return defaultValue;
+      if (value is int) return value;
+      if (value is double) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? defaultValue;
+      return defaultValue;
+    }
 
-  // Десериализация из JSON-объекта
-  static Tag fromJson(Map<String, dynamic> json) {
+    String safeParseString(dynamic value, {String defaultValue = ''}) {
+      if (value == null) return defaultValue;
+      if (value is String) return value;
+      return value.toString();
+    }
+
     return Tag(
-      id: json['id'] as int,
-      name: json['name'] as String,
+      id: safeParseInt(json['id']),
+      name: safeParseString(json['name'], defaultValue: 'Без названия'),
     );
   }
 
-  // Десериализация из JSON-строки
-  static Tag fromJsonString(String jsonString) {
-    final json = jsonDecode(jsonString) as Map<String, dynamic>;
-    return Tag.fromJson(json);
+  // Парсинг списка dynamic в список Tag
+  static List<Tag> parseList(List<dynamic> jsonList) {
+    return jsonList
+        .map((item) {
+          try {
+            if (item is Map<String, dynamic>) {
+              return Tag.fromJson(item);
+            }
+            return null;
+          } catch (e) {
+            print('Ошибка парсинга элемента Tag: $e');
+            return null;
+          }
+        })
+        .where((tag) => tag != null)
+        .cast<Tag>()
+        .toList();
   }
 
-  @override
-  String toString() => 'Tag(id: $id, name: "$name")';
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Tag && other.id == id && other.name == name;
+  // Альтернативный метод парсинга для List<Map<String, dynamic>>
+  static List<Tag> parseMapList(List<Map<String, dynamic>> jsonList) {
+    return jsonList
+        .map((json) {
+          try {
+            return Tag.fromJson(json);
+          } catch (e) {
+            print('Ошибка парсинга элемента Tag: $e');
+            return null;
+          }
+        })
+        .where((tag) => tag != null)
+        .cast<Tag>()
+        .toList();
   }
-
-  @override
-  int get hashCode => id.hashCode ^ name.hashCode;
 }

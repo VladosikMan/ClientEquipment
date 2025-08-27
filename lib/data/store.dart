@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Store {
   final int? id;
   final String qr;
@@ -9,7 +7,7 @@ class Store {
   final double date;
 
   Store({
-    required this.id,
+    this.id,
     required this.qr,
     required this.name,
     required this.type,
@@ -17,7 +15,7 @@ class Store {
     required this.date,
   });
 
-  // Конвертация в JSON-объект
+  // Преобразование объекта в Map
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -29,31 +27,76 @@ class Store {
     };
   }
 
-  // Конвертация в JSON-строку
-  String toJsonString() {
-    return jsonEncode(toJson());
-  }
+  // Создание объекта из Map с безопасным парсингом
+  factory Store.fromJson(Map<String, dynamic> json) {
+    // Функции безопасного парсинга
+    int? safeParseInt(dynamic value) {
+      if (value == null) return null;
+      if (value is int) return value;
+      if (value is double) return value.toInt();
+      if (value is String) return int.tryParse(value);
+      return null;
+    }
 
-  // Десериализация из JSON-объекта
-  static Store fromJson(Map<String, dynamic> json) {
+    double? safeParseDouble(dynamic value) {
+      if (value == null) return null;
+      if (value is double) return value;
+      if (value is int) return value.toDouble();
+      if (value is String) return double.tryParse(value);
+      return null;
+    }
+
+    String safeParseString(dynamic value, {String defaultValue = ''}) {
+      if (value == null) return defaultValue;
+      if (value is String) return value;
+      return value.toString();
+    }
+
     return Store(
-      id: json['id'] as int,
-      qr: json['qr'] as String,
-      name: json['name'] as String,
-      type: json['type'] as int,
-      address: json['address'] as String,
-      date: json['date'] as double,
+      id: safeParseInt(json['id']),
+      qr: safeParseString(json['qr']),
+      name: safeParseString(json['name'], defaultValue: 'Без названия'),
+      type: safeParseInt(json['type']) ?? 0,
+      address: safeParseString(
+        json['address'],
+        defaultValue: 'Адрес не указан',
+      ),
+      date: safeParseDouble(json['date']) ?? 0.0,
     );
   }
 
-  // Десериализация из JSON-строки
-  static Store fromJsonString(String jsonString) {
-    final json = jsonDecode(jsonString) as Map<String, dynamic>;
-    return Store.fromJson(json);
+  // Парсинг списка dynamic в список Store
+  static List<Store> parseList(List<dynamic> jsonList) {
+    return jsonList
+        .map((item) {
+          try {
+            if (item is Map<String, dynamic>) {
+              return Store.fromJson(item);
+            }
+            return null;
+          } catch (e) {
+            print('Ошибка парсинга элемента Store: $e');
+            return null;
+          }
+        })
+        .where((store) => store != null)
+        .cast<Store>()
+        .toList();
   }
 
-  @override
-  String toString() {
-    return 'Store(id: $id, qr: $qr, name: $name, type: $type, address: $address, date: $date)';
+  // Альтернативный метод парсинга для List<Map<String, dynamic>>
+  static List<Store> parseMapList(List<Map<String, dynamic>> jsonList) {
+    return jsonList
+        .map((json) {
+          try {
+            return Store.fromJson(json);
+          } catch (e) {
+            print('Ошибка парсинга элемента Store: $e');
+            return null;
+          }
+        })
+        .where((store) => store != null)
+        .cast<Store>()
+        .toList();
   }
 }

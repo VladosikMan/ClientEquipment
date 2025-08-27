@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class Journal {
   final int id;
   final String comment;
@@ -17,7 +15,7 @@ class Journal {
     required this.date,
   });
 
-  // Конвертация в JSON-объект
+  // Преобразование объекта в Map
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -29,32 +27,76 @@ class Journal {
     };
   }
 
-  // Конвертация в JSON-строку
-  String toJsonString() {
-    return jsonEncode(toJson());
-  }
+  // Создание объекта из Map с безопасным парсингом
+  factory Journal.fromJson(Map<String, dynamic> json) {
+    // Функции безопасного парсинга
+    int safeParseInt(dynamic value, {int defaultValue = 0}) {
+      if (value == null) return defaultValue;
+      if (value is int) return value;
+      if (value is double) return value.toInt();
+      if (value is String) return int.tryParse(value) ?? defaultValue;
+      return defaultValue;
+    }
 
-  // Десериализация из JSON-объекта
-  static Journal fromJson(Map<String, dynamic> json) {
+    double safeParseDouble(dynamic value, {double defaultValue = 0.0}) {
+      if (value == null) return defaultValue;
+      if (value is double) return value;
+      if (value is int) return value.toDouble();
+      if (value is String) return double.tryParse(value) ?? defaultValue;
+      return defaultValue;
+    }
+
+    String safeParseString(dynamic value, {String defaultValue = ''}) {
+      if (value == null) return defaultValue;
+      if (value is String) return value;
+      return value.toString();
+    }
+
     return Journal(
-      id: json['id'] as int,
-      comment: json['comment'] as String,
-      typeAction: json['typeAction'] as int,
-      userId: json['userId'] as int,
-      detailId: json['detailId'] as int,
-      date: json['date'] as double,
+      id: safeParseInt(json['id']),
+      comment: safeParseString(
+        json['comment'],
+        defaultValue: 'Нет комментария',
+      ),
+      typeAction: safeParseInt(json['typeAction']),
+      userId: safeParseInt(json['userId']),
+      detailId: safeParseInt(json['detailId']),
+      date: safeParseDouble(json['date']),
     );
   }
 
-  // Десериализация из JSON-строки
-  static Journal fromJsonString(String jsonString) {
-    final json = jsonDecode(jsonString) as Map<String, dynamic>;
-    return Journal.fromJson(json);
+  // Парсинг списка dynamic в список Journal
+  static List<Journal> parseList(List<dynamic> jsonList) {
+    return jsonList
+        .map((item) {
+          try {
+            if (item is Map<String, dynamic>) {
+              return Journal.fromJson(item);
+            }
+            return null;
+          } catch (e) {
+            print('Ошибка парсинга элемента Journal: $e');
+            return null;
+          }
+        })
+        .where((journal) => journal != null)
+        .cast<Journal>()
+        .toList();
   }
 
-  @override
-  String toString() {
-    return 'Journal(id: $id, comment: "$comment", typeAction: $typeAction, '
-        'userId: $userId, detailId: $detailId, date: $date)';
+  // Альтернативный метод парсинга для List<Map<String, dynamic>>
+  static List<Journal> parseMapList(List<Map<String, dynamic>> jsonList) {
+    return jsonList
+        .map((json) {
+          try {
+            return Journal.fromJson(json);
+          } catch (e) {
+            print('Ошибка парсинга элемента Journal: $e');
+            return null;
+          }
+        })
+        .where((journal) => journal != null)
+        .cast<Journal>()
+        .toList();
   }
 }
