@@ -1,3 +1,4 @@
+import 'package:eqiup_client/data/list_notification.dart';
 import 'package:eqiup_client/models/http/details_model.dart';
 import 'package:eqiup_client/widgets/detail_card.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,7 @@ class DetailsFragment extends StatelessWidget {
 
           // 2. Обновляемый список элементов
           Expanded(
-            child:ControlledListView(
+            child: ControlledListView(
               // items: filteredItems,
               // onItemTap: (item) {
               //   print('Выбран элемент: $item');
@@ -56,40 +57,23 @@ class FilterSection extends StatelessWidget {
 
 // 2. Контролируемый список
 class ControlledListView extends StatelessWidget {
-  // final List<String> items;
-  // final ValueChanged<String> onItemTap;
-
-  const ControlledListView({
-    super.key,
-    // required this.items,
-    //   required this.onItemTap,
-  });
+  const ControlledListView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // return ListView.builder(
-    //   itemCount: items.length,
-    //   itemBuilder: (context, index) {
-    //     final item = items[index];
-    //     return ListTile(title: Text(item), onTap: () => onItemTap(item));
-    //   },
-    // );
-
-    // return   Consumer<DetailsModel>(
-    //             builder: (context, model, child) {
-    //               return Text('Total price: ${model.length}');
-    //             },
-    //           );
-
     return Consumer<DetailsModel>(
       builder: (context, model, child) {
         return ListView.builder(
-
           scrollDirection: Axis.vertical,
           itemCount: model.details.length,
           itemBuilder: (context, index) {
             final item = model.details[index];
-            return DetailCard(detail: item, deleteDetail: () {  model.deleteDetail(item.id!);}, );
+            return DetailCard(
+              notif: ListNotification(header: item.name!, dateHeader: item.date.toString(), information: "information", tags: "tags"),
+              deleteDetail: () {
+                model.deleteDetail(item.id!);
+              },
+            );
           },
         );
       },
@@ -99,14 +83,7 @@ class ControlledListView extends StatelessWidget {
 
 // 3. Секция управления
 class ControlButtons extends StatelessWidget {
-  // final VoidCallback onAdd;
-  //final VoidCallback onClear;
-
-  const ControlButtons({
-    super.key,
-    //    required this.onAdd,
-    //  required this.onClear,
-  });
+  const ControlButtons({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -126,12 +103,22 @@ class ControlButtons extends StatelessWidget {
           Consumer<DetailsModel>(
             builder: (context, model, child) {
               return ElevatedButton(
-                onPressed: () => {model.createDetail(Detail(articleNumber: "123123", name: "Колайдер", status: 1, date: 123213, groupId: 7, storeId: 7))},
+                onPressed: () => {
+                  model.createDetail(
+                    Detail(
+                      articleNumber: "123123",
+                      name: "Колайдер",
+                      status: 1,
+                      date: 123213,
+                      groupId: 7,
+                      storeId: 7,
+                    ),
+                  ),
+                },
                 child: const Text('Очиситить'),
               );
             },
           ),
-
           ElevatedButton(onPressed: () {}, child: const Text('Очистить')),
         ],
       ),
