@@ -1,6 +1,9 @@
 import 'package:eqiup_client/models/http/details_model.dart';
+import 'package:eqiup_client/widgets/detail_card.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../data/details.dart';
 
 class DetailsFragment extends StatelessWidget {
   const DetailsFragment({super.key});
@@ -15,7 +18,7 @@ class DetailsFragment extends StatelessWidget {
 
           // 2. Обновляемый список элементов
           Expanded(
-            child: ControlledListView(
+            child:ControlledListView(
               // items: filteredItems,
               // onItemTap: (item) {
               //   print('Выбран элемент: $item');
@@ -72,11 +75,25 @@ class ControlledListView extends StatelessWidget {
     //   },
     // );
 
-    return   Consumer<DetailsModel>(
-                builder: (context, model, child) {
-                  return Text('Total price: ${model.length}');
-                },
-              );
+    // return   Consumer<DetailsModel>(
+    //             builder: (context, model, child) {
+    //               return Text('Total price: ${model.length}');
+    //             },
+    //           );
+
+    return Consumer<DetailsModel>(
+      builder: (context, model, child) {
+        return ListView.builder(
+
+          scrollDirection: Axis.vertical,
+          itemCount: model.details.length,
+          itemBuilder: (context, index) {
+            final item = model.details[index];
+            return DetailCard(detail: item);
+          },
+        );
+      },
+    );
   }
 }
 
@@ -101,18 +118,21 @@ class ControlButtons extends StatelessWidget {
           Consumer<DetailsModel>(
             builder: (context, model, child) {
               return ElevatedButton(
-                onPressed: () => {   model.getAllDetails()},
+                onPressed: () => {model.getAllDetails()},
                 child: const Text('Добавить'),
               );
             },
           ),
-
-          ElevatedButton(
-            onPressed: () {
-
+          Consumer<DetailsModel>(
+            builder: (context, model, child) {
+              return ElevatedButton(
+                onPressed: () => {model.createDetail(Detail(articleNumber: "123123", name: "Колайдер", status: 1, date: 123213, groupId: 7, storeId: 7))},
+                child: const Text('Очиситить'),
+              );
             },
-            child: const Text('Очистить'),
           ),
+
+          ElevatedButton(onPressed: () {}, child: const Text('Очистить')),
         ],
       ),
     );
