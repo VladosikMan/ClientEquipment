@@ -10,8 +10,10 @@ class DetailsModel with ChangeNotifier {
   int length = 0;
   List<Detail> _details = [];
 
+  DetailsModel() {
+    getAllDetails(); // Вызов при создании контроллера
+  }
   // Состояние загрузки для отслеживания процесса запроса к серверу.
-  bool _isLoading = false;
 
   // Геттеры для доступа к данным извне. Они не позволяют изменить список напрямую.
   List<Detail> get details => _details;

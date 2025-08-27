@@ -23,4 +23,7 @@ class StoreApi {
 
   Future<Response> getAllStores() async =>
       _dio.get('$API_URL/');
+
+  Future<Response> getLengthStore()async =>
+      _dio.get('$API_URL/length');
 }

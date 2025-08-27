@@ -10,7 +10,7 @@ class JournalScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Журнал')),
-      body:DetailCard(detail: Detail(name: "sdfsf",date: 1212), deleteDetail: () {  },)
+      body:Text("data")/*DetailCard(notif: Detail(name: "sdfsf",date: 1212), deleteDetail: () {  },)*/
     );
   }
 }
