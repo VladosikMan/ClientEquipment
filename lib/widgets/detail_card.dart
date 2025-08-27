@@ -6,7 +6,9 @@ import '../data/details.dart';
 class DetailCard extends StatelessWidget {
   final Detail detail;
 
-  const DetailCard({super.key, required this.detail});
+  final VoidCallback deleteDetail;
+
+  const DetailCard({super.key, required this.detail, required this.deleteDetail});
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +99,7 @@ class DetailCard extends StatelessWidget {
                 onPressed: () {
                   // Действие при нажатии на корзину
                   print('Удалить карточку');
+                  deleteDetail();
                 },
               ),
             ),

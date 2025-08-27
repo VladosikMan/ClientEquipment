@@ -89,7 +89,7 @@ class ControlledListView extends StatelessWidget {
           itemCount: model.details.length,
           itemBuilder: (context, index) {
             final item = model.details[index];
-            return DetailCard(detail: item);
+            return DetailCard(detail: item, deleteDetail: () {  model.deleteDetail(item.id!);}, );
           },
         );
       },
