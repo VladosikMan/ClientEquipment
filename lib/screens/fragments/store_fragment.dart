@@ -28,7 +28,7 @@ class StoreFragment extends StatelessWidget {
           ),
 
           // 3. Панель управления
-        //  ControlButtons(/*onAdd: addItem, onClear: clearItems*/),
+        ControlButtons(/*onAdd: addItem, onClear: clearItems*/),
         ],
       ),
     );
@@ -78,10 +78,54 @@ class ControlledListView extends StatelessWidget {
           itemCount: model.stores.length,
           itemBuilder: (context, index) {
             final item = model.stores[index];
-            return DetailCard(notif: ListNotification(header: item.name, dateHeader: item.date.toString(), information: item.address, tags: "tags"), deleteDetail: () {  /*model.deleteDetail(item.id!);*/}, );
+            return DetailCard(notif: ListNotification(header: item.name, dateHeader: item.date.toString(), information: item.address, tags: "tags"), deleteDetail: () {  model.deleteStore(item.id!);}, );
           },
         );
       },
+    );
+  }
+}
+
+
+// 3. Секция управления
+class ControlButtons extends StatelessWidget {
+  const ControlButtons({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Consumer<StoreModel>(
+            builder: (context, model, child) {
+              return ElevatedButton(
+                onPressed: () => {model.getAllStores()},
+                child: const Text('Добавить'),
+              );
+            },
+          ),
+          Consumer<StoreModel>(
+            builder: (context, model, child) {
+              return ElevatedButton(
+                onPressed: () => {
+                  model.createStore(
+                    Store(
+                      qr: "124312",
+                      name: "Ящик№3",
+                      type: 3,
+                      address: "ук2", date: 13131
+                    ),
+                  ),
+                },
+                child: const Text('Очиситить'),
+              );
+            },
+          ),
+          ElevatedButton(onPressed: () {}, child: const Text('Очистить')),
+        ],
+      ),
     );
   }
 }

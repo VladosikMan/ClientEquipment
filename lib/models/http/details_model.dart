@@ -13,6 +13,7 @@ class DetailsModel with ChangeNotifier {
   DetailsModel() {
     getAllDetails(); // Вызов при создании контроллера
   }
+
   // Состояние загрузки для отслеживания процесса запроса к серверу.
 
   // Геттеры для доступа к данным извне. Они не позволяют изменить список напрямую.
@@ -67,7 +68,6 @@ class DetailsModel with ChangeNotifier {
       final response = await ApiClient().detail.deleteDetailById(id.toString());
       if (response.statusCode == 200) {
         //TODO обработка создания детали
-        //     _details.insert(0, Detail.fromJson(response.data));
         final int index = _details.indexOf(
           _details.firstWhere((detail) => detail.id == id),
         );
